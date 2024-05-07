@@ -86,7 +86,6 @@ class DouyinWebCrawler:
     async def get_douyin_headers(self, cookie: str | None = None):
         douyin_config = config["TokenManager"]["douyin"]
         cookie = cookie or douyin_config["headers"]["Cookie"]
-        print(f"Cookie: {cookie}")
         kwargs = {
             "headers": {
                 "Accept-Language": douyin_config["headers"]["Accept-Language"],
