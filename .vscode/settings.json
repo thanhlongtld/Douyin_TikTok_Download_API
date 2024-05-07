@@ -1,0 +1,8 @@
+{
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  },
+  "pylint.path": [
+    "/Users/longdo/Code/Douyin_TikTok_Download_API/venv/bin/pylint"
+  ]
+}

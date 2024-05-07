@@ -1,13 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter, Body, Query, Request, HTTPException  # 导入FastAPI组件
-from app.api.models.APIResponseModel import (
-    ResponseModel,
-    ErrorResponseModel,
-)  # 导入响应模型
+from fastapi import APIRouter, Body, HTTPException, Query, Request  # 导入FastAPI组件
 
+from app.api.models.APIResponseModel import ErrorResponseModel  # 导入响应模型
+from app.api.models.APIResponseModel import ResponseModel
 from crawlers.douyin.web.web_crawler import DouyinWebCrawler  # 导入抖音Web爬虫
-
 
 router = APIRouter()
 DouyinWebCrawler = DouyinWebCrawler()
@@ -73,6 +70,7 @@ async def fetch_user_post_videos(
     ),
     max_cursor: int = Query(default=0, description="最大游标/Maximum cursor"),
     count: int = Query(default=20, description="每页数量/Number per page"),
+    cookie: str = Query(None, description="Douyin cookie"),
 ):
     """
     # [中文]
@@ -102,7 +100,7 @@ async def fetch_user_post_videos(
     """
     try:
         data = await DouyinWebCrawler.fetch_user_post_videos(
-            sec_user_id, max_cursor, count
+            sec_user_id, max_cursor, count, cookie=cookie.strip()
         )
         return ResponseModel(code=200, router=request.url.path, data=data)
     except Exception as e:
