@@ -44,9 +44,7 @@ from crawlers.tiktok.app.endpoints import TikTokAPIEndpoints
 from crawlers.utils.utils import model_to_query_string
 
 # TikTok接口数据请求模型
-from crawlers.tiktok.app.models import (
-    BaseRequestModel, FeedVideoDetail
-)
+from crawlers.tiktok.app.models import BaseRequestModel, FeedVideoDetail
 
 # 配置文件路径
 path = os.path.abspath(os.path.dirname(__file__))
@@ -81,7 +79,9 @@ class TikTokAPPCrawler:
         param_str = model_to_query_string(params)
         url = f"{TikTokAPIEndpoints.HOME_FEED}?{param_str}"
         # 创建一个基础爬虫
-        base_crawler = BaseCrawler(proxies=kwargs["proxies"], crawler_headers=kwargs["headers"])
+        base_crawler = BaseCrawler(
+            proxies=kwargs["proxies"], crawler_headers=kwargs["headers"]
+        )
         async with base_crawler as crawler:
             response = await crawler.fetch_get_json(url)
             response = response.get("aweme_list")[0]

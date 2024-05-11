@@ -34,26 +34,15 @@
 
 
 import asyncio  # 异步I/O
+import os  # 系统操作
 import time  # 时间操作
 
 import httpx
 import yaml  # 配置文件
-import os  # 系统操作
 
 # 基础爬虫客户端和抖音API端点
 from crawlers.base_crawler import BaseCrawler
 from crawlers.douyin.web.endpoints import DouyinAPIEndpoints
-
-# 抖音应用的工具类
-from crawlers.douyin.web.utils import (
-    AwemeIdFetcher,  # Aweme ID获取
-    BogusManager,  # XBogus管理
-    SecUserIdFetcher,  # 安全用户ID获取
-    TokenManager,  # 令牌管理
-    VerifyFpManager,  # 验证管理
-    WebCastIdFetcher,  # 直播ID获取
-    extract_valid_urls,  # URL提取
-)
 
 # 抖音接口数据请求模型
 from crawlers.douyin.web.models import (
@@ -63,14 +52,23 @@ from crawlers.douyin.web.models import (
     PostCommentsReply,
     PostDanmaku,
     PostDetail,
-    UserProfile,
     UserCollection,
     UserLike,
     UserLive,
     UserLive2,
     UserMix,
     UserPost,
+    UserProfile,
 )
+
+# 抖音应用的工具类
+from crawlers.douyin.web.utils import AwemeIdFetcher  # Aweme ID获取
+from crawlers.douyin.web.utils import BogusManager  # XBogus管理
+from crawlers.douyin.web.utils import SecUserIdFetcher  # 安全用户ID获取
+from crawlers.douyin.web.utils import TokenManager  # 令牌管理
+from crawlers.douyin.web.utils import VerifyFpManager  # 验证管理
+from crawlers.douyin.web.utils import WebCastIdFetcher  # 直播ID获取
+from crawlers.douyin.web.utils import extract_valid_urls  # URL提取
 
 # 配置文件路径
 path = os.path.abspath(os.path.dirname(__file__))
@@ -103,9 +101,9 @@ class DouyinWebCrawler:
     "-------------------------------------------------------handler接口列表-------------------------------------------------------"
 
     # 获取单个作品数据
-    async def fetch_one_video(self, aweme_id: str):
+    async def fetch_one_video(self, aweme_id: str, cookie: str | None = None):
         # 获取抖音的实时Cookie
-        kwargs = await self.get_douyin_headers()
+        kwargs = await self.get_douyin_headers(cookie)
         # 创建一个基础爬虫
         base_crawler = BaseCrawler(
             proxies=kwargs["proxies"], crawler_headers=kwargs["headers"]
